@@ -1,21 +1,13 @@
-import requests
-from bs4 import BeautifulSoup
+import os
 
-session = requests.Session()
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
-BCA_EBANKING_URL = "https://ibank.klikbca.com"
+from dotenv import load_dotenv
 
-USERID = "TEST123"
-PWD = "STRING"
+from klikbca import KlikBcaScraper
 
-headers = {
-    "User-Agent": USER_AGENT
-}
-req = session.get(BCA_EBANKING_URL, headers=headers, verify=False)
-soup = BeautifulSoup(req.text, "html.parser")
+load_dotenv()
 
-form = soup.find_all("form")
-for i in form:
-    user_id = i.find(id="user_id")
-    password = i.find(id="pswd")
+USERID = os.environ.get("user_id")
+PASSWORD = os.environ.get("password")
 
+bca = KlikBcaScraper(user_id=USERID, user_password=PASSWORD)
+print(bca.login())
